@@ -42,7 +42,7 @@ A modern face recognition-based attendance system that automatically identifies 
 2. Install the required packages:
 
 ```bash
-pip install opencv-python scikit-learn pandas numpy streamlit streamlit-autorefresh win32com```
+pip install opencv-python scikit-learn pandas numpy streamlit streamlit-autorefresh win32com
 
 ### Usage
 1. Add faces to the dataset using the `add_faces.py` script.
