@@ -46,13 +46,13 @@ pip install opencv-python scikit-learn pandas numpy streamlit streamlit-autorefr
 
 ### Usage
 1. Add faces to the dataset using the `add_faces.py` script.
-   - python add_faces.py
+    python add_faces.py
 
 2. Run the `test.py` script to test the face recognition system.
-   - python test.py
+    python test.py
 
 3. Run the `app.py` script to start the Streamlit dashboard.
-   - streamlit run app.py
+    streamlit run app.py
 
 
 
