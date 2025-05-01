@@ -54,8 +54,8 @@ This system captures real-time video from a webcam, detects and recognizes faces
 
 1. **Clone the repository**  
    ```bash
-   git clone https://github.com/<your-username>/face-attendance-system.git
-   cd face-attendance-system
+   git clone https://github.com/DnyanDeepH/Real-time-Face-Attendance-System.git
+   cd Real-time-Face-Attendance-System
    ```
 
 2. **Install the required dependencies**  
