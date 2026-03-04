@@ -113,19 +113,23 @@ Real time Face Attendance System/
 
 ### Prerequisites
 
-- Python **3.10** or higher
-- A working **webcam**
-- Windows OS (uses DirectShow backend; tested on Windows 10/11)
+- Python 3.6 or higher
+- Webcam or camera device
+- Git and terminal access
+- Required Python libraries
 
----
+### 🔧 Installation
 
-### Step 1 — Create & activate a virtual environment
+1. **Clone the repository**  
+   ```bash
+   git clone https://github.com/<your-username>/face-attendance-system.git
+   cd face-attendance-system
+   ```
 
-```powershell
-# Inside the project root folder
-python -m venv .venv
-.venv\Scripts\activate
-```
+2. **Install the required dependencies**  
+   ```bash
+   pip install opencv-python scikit-learn pandas numpy streamlit streamlit-autorefresh pywin32
+   ```
 
 ---
 
