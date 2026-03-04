@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% block title %}Attendance Report – Face Attendance{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1>📊 Attendance Percentage Report</h1>
+  <p>Overall attendance statistics for all registered students.</p>
+</div>
+
+{% if low_att %}
+<div class="alert alert-error">
+  ⚠️
+  <strong>{{ low_att|length }} student{{ low_att|length|pluralize }}</strong>
+  below 75% attendance threshold.
+</div>
+{% else %}
+<div class="alert alert-success">
+  ✅ All students are above the 75% attendance threshold.
+</div>
+{% endif %}
+
+<div class="card" style="padding: 0">
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Name</th>
+          <th>Student ID</th>
+          <th>Days Present</th>
+          <th>Total Days</th>
+          <th>Attendance %</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for s in stats %}
+        <tr>
+          <td>{{ forloop.counter }}</td>
+          <td><strong>{{ s.name }}</strong></td>
+          <td>{{ s.student_id }}</td>
+          <td>{{ s.present }}</td>
+          <td>{{ s.total }}</td>
+          <td>
+            <div
+              class="progress-bar-wrap"
+              style="
+                width: 120px;
+                display: inline-block;
+                vertical-align: middle;
+                margin-right: 8px;
+              "
+            >
+              <div
+                class="progress-bar-fill {% if s.percentage >= 75 %}fill-green{% elif s.percentage >= 60 %}fill-yellow{% else %}fill-red{% endif %}"
+                style="width:{{ s.percentage }}%;"
+              ></div>
+            </div>
+            <strong>{{ s.percentage }}%</strong>
+          </td>
+          <td>
+            {% if s.percentage >= 75 %}
+            <span class="badge badge-green">Good Standing</span>
+            {% elif s.percentage >= 60 %}
+            <span class="badge badge-yellow">Warning</span>
+            {% else %}
+            <span class="badge badge-red">Below Threshold</span>
+            {% endif %}
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td
+            colspan="7"
+            style="text-align: center; color: var(--muted); padding: 40px"
+          >
+            No data available. Add students and record attendance first.
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

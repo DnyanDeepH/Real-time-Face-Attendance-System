@@ -1,0 +1,3 @@
+# Prevent Prettier from reformatting Django HTML templates
+# (Prettier collapses {% block %} tags onto one line, breaking Django's parser)
+django_app/templates/**

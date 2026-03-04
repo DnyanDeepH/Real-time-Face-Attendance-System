@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block title %}Add Student – Face Attendance{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1>➕ Register New Student</h1>
+  <p>Fill in the student details, then capture face samples for recognition.</p>
+</div>
+
+<div class="card" style="max-width: 560px">
+  <form method="post">
+    {% csrf_token %} {% for field in form %}
+    <div class="form-group">
+      <label>{{ field.label }}</label>
+      {{ field }} {% if field.errors %}
+      <div class="alert alert-error" style="margin-top: 6px">
+        {{ field.errors.0 }}
+      </div>
+      {% endif %}
+    </div>
+    {% endfor %}
+    <div style="display: flex; gap: 12px; margin-top: 8px">
+      <button type="submit" class="btn btn-primary">
+        Next: Capture Face →
+      </button>
+      <a href="{% url 'student_list' %}" class="btn btn-outline">Cancel</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

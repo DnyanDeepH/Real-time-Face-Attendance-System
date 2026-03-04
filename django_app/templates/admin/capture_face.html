@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Capture Face – {{ student.name }}{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1>📸 Capture Face Samples</h1>
+  <p>
+    Positioning <strong>{{ student.name }}</strong> ({{ student.student_id }})
+    in front of the camera.
+  </p>
+</div>
+
+<div style="display: flex; gap: 28px; flex-wrap: wrap; align-items: flex-start">
+  <div>
+    <div class="camera-wrapper" style="width: 500px">
+      <img
+        src="{% url 'capture_feed' student.student_id %}"
+        id="cap-feed"
+        alt="Capture Feed"
+      />
+    </div>
+  </div>
+  <div style="flex: 1; min-width: 220px">
+    <div class="card" style="text-align: center">
+      <div class="sample-count" id="sample-count">0</div>
+      <div class="sample-label">samples of 100 collected</div>
+      <div class="progress-bar-wrap" style="margin: 16px 0">
+        <div
+          class="progress-bar-fill fill-green"
+          id="progress-fill"
+          style="width: 0%"
+        ></div>
+      </div>
+      <div id="status-msg" style="color: var(--muted); font-size: 0.9rem">
+        Please look at the camera and stay still.
+      </div>
+    </div>
+
+    <div
+      id="done-box"
+      class="card"
+      style="display: none; border-color: var(--green); text-align: center"
+    >
+      <div style="font-size: 2.5rem; margin-bottom: 12px">✅</div>
+      <div style="color: var(--green); font-size: 1.1rem; font-weight: 700">
+        Face Captured Successfully!
+      </div>
+      <p style="color: var(--muted); margin: 10px 0 18px">
+        {{ student.name }} has been registered.
+      </p>
+      <a href="{% url 'student_list' %}" class="btn btn-success"
+        >View All Students →</a
+      >
+    </div>
+  </div>
+</div>
+{% endblock %} {% block extra_js %}
+<script>
+  const studentId = "{{ student.student_id }}";
+  const statusUrl = "{% url 'capture_status' student.student_id %}";
+
+  function pollStatus() {
+    fetch(statusUrl)
+      .then((r) => r.json())
+      .then((data) => {
+        const pct = Math.round((data.samples / data.max) * 100);
+        document.getElementById("sample-count").textContent = data.samples;
+        document.getElementById("progress-fill").style.width = pct + "%";
+
+        if (data.done) {
+          document.getElementById("cap-feed").style.display = "none";
+          document.getElementById("done-box").style.display = "block";
+          document.getElementById("status-msg").textContent = "Done!";
+        } else {
+          if (pct > 60)
+            document.getElementById("progress-fill").className =
+              "progress-bar-fill fill-yellow";
+          if (pct > 85)
+            document.getElementById("progress-fill").className =
+              "progress-bar-fill fill-green";
+          setTimeout(pollStatus, 800);
+        }
+      })
+      .catch(() => setTimeout(pollStatus, 1500));
+  }
+
+  document.addEventListener("DOMContentLoaded", () =>
+    setTimeout(pollStatus, 1000),
+  );
+</script>
+{% endblock %}

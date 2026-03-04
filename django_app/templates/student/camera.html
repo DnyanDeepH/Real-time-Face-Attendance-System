@@ -1,0 +1,84 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Student Attendance – Face Attendance</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+  </head>
+  <body>
+    <div class="camera-page">
+      <h1 class="camera-title">📷 Mark Your Attendance</h1>
+      <p class="camera-subtitle">
+        Look at the camera and press <strong>Mark Attendance</strong> when your
+        name appears.
+      </p>
+
+      <div class="camera-wrapper">
+        <img
+          src="{% url 'student_video_feed' %}"
+          alt="Live Camera Feed"
+          id="camera-feed"
+        />
+      </div>
+
+      <div class="camera-controls">
+        <button
+          class="btn btn-success btn-lg"
+          id="mark-btn"
+          onclick="markAttendance()"
+        >
+          ✅ Mark Attendance
+        </button>
+        <a
+          href="{% url 'landing' %}"
+          class="btn btn-outline btn-lg"
+          id="stop-btn"
+        >
+          🏠 Back to Home
+        </a>
+      </div>
+
+      <div class="camera-result">
+        <div class="result-box" id="result-msg" style="display: none"></div>
+      </div>
+    </div>
+
+    <script src="{% static 'js/main.js' %}"></script>
+    <script>
+      async function markAttendance() {
+        const btn = document.getElementById("mark-btn");
+        const msg = document.getElementById("result-msg");
+        btn.disabled = true;
+        btn.textContent = "Processing…";
+
+        try {
+          const data = await postJSON("{% url 'student_mark_attendance' %}");
+          msg.style.display = "block";
+          if (data.success) {
+            msg.className = "result-box";
+            msg.style.borderColor = "#3dd68c";
+            msg.innerHTML = `
+                <div style="color:#3dd68c; font-size:1.2rem; font-weight:700;">✅ Attendance Marked!</div>
+                <div style="margin-top:8px;">
+                    <strong>${data.name}</strong> &nbsp;|&nbsp; ${data.date} &nbsp;|&nbsp; ${data.time}
+                </div>`;
+          } else {
+            msg.className = "result-box";
+            msg.style.borderColor = "#f7685b";
+            msg.innerHTML = `<div style="color:#f7685b;">⚠️ ${data.message}</div>`;
+          }
+        } catch (e) {
+          msg.style.display = "block";
+          msg.innerHTML = `<div style="color:#f7685b;">⚠️ Error contacting server.</div>`;
+        }
+
+        setTimeout(() => {
+          btn.disabled = false;
+          btn.textContent = "✅ Mark Attendance";
+        }, 2500);
+      }
+    </script>
+  </body>
+</html>

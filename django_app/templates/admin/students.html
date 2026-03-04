@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% block title %}Students – Face Attendance{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1>👥 Registered Students</h1>
+  <p>{{ total }} active student{{ total|pluralize }} in the system.</p>
+</div>
+
+<div style="margin-bottom: 20px">
+  <a href="{% url 'add_student' %}" class="btn btn-primary"
+    >➕ Register New Student</a
+  >
+</div>
+
+<div class="card" style="padding: 0">
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Name</th>
+          <th>Student ID / Roll No</th>
+          <th>Department</th>
+          <th>Email</th>
+          <th>Registered On</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for s in students %}
+        <tr>
+          <td>{{ forloop.counter }}</td>
+          <td><strong>{{ s.name }}</strong></td>
+          <td><span class="badge badge-blue">{{ s.student_id }}</span></td>
+          <td>{{ s.department|default:"—" }}</td>
+          <td>{{ s.email|default:"—" }}</td>
+          <td>{{ s.date_registered }}</td>
+          <td>
+            <form
+              method="post"
+              action="{% url 'delete_student' s.pk %}"
+              onsubmit="return confirm('Remove {{ s.name }} from the system?');"
+            >
+              {% csrf_token %}
+              <button
+                type="submit"
+                class="btn btn-danger"
+                style="padding: 6px 14px; font-size: 0.8rem"
+              >
+                🗑 Remove
+              </button>
+            </form>
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td
+            colspan="7"
+            style="text-align: center; color: var(--muted); padding: 40px"
+          >
+            No students registered yet.
+            <a href="{% url 'add_student' %}">Add one →</a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

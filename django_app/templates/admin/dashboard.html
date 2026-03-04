@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+{% block title %}Admin Dashboard – Face Attendance{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1>🏠 Dashboard</h1>
+  <p>Welcome back, <strong>{{ admin_username }}</strong> — {{ today_date }}</p>
+</div>
+
+<!-- Stat Cards -->
+<div class="stat-cards">
+  <div class="stat-card accent">
+    <div class="stat-value">{{ total_students }}</div>
+    <div class="stat-label">Registered Students</div>
+  </div>
+  <div class="stat-card green">
+    <div class="stat-value">{{ today_present }}</div>
+    <div class="stat-label">Present Today</div>
+  </div>
+  <div class="stat-card red">
+    <div class="stat-value">{{ today_absent }}</div>
+    <div class="stat-label">Absent Today</div>
+  </div>
+  <div class="stat-card yellow">
+    <div class="stat-value">{{ low_att_students|length }}</div>
+    <div class="stat-label">Below 75% Attendance</div>
+  </div>
+</div>
+
+<!-- Quick Actions -->
+<div class="card">
+  <h3
+    style="
+      margin-bottom: 16px;
+      color: var(--muted);
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    "
+  >
+    Quick Actions
+  </h3>
+  <div style="display: flex; gap: 12px; flex-wrap: wrap">
+    <a href="{% url 'add_student' %}" class="btn btn-primary"
+      >➕ Add New Student</a
+    >
+    <a href="{% url 'student_list' %}" class="btn btn-outline"
+      >👥 View Students</a
+    >
+    <a href="{% url 'attendance_index' %}" class="btn btn-outline"
+      >📅 Attendance Records</a
+    >
+    <a href="{% url 'attendance_report' %}" class="btn btn-outline"
+      >📊 Attendance Report</a
+    >
+  </div>
+</div>
+
+<!-- Low Attendance Alert -->
+{% if low_att_students %}
+<div class="card" style="border-color: rgba(247, 104, 91, 0.4)">
+  <h3 style="color: var(--red); margin-bottom: 16px">
+    ⚠️ Students Below 75% Attendance
+  </h3>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Student ID</th>
+          <th>Present</th>
+          <th>Total Days</th>
+          <th>Attendance %</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for s in low_att_students %}
+        <tr>
+          <td>{{ s.name }}</td>
+          <td>{{ s.student_id }}</td>
+          <td>{{ s.present }}</td>
+          <td>{{ s.total }}</td>
+          <td>
+            <span class="badge badge-red">{{ s.percentage }}%</span>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <div style="margin-top: 12px">
+    <a
+      href="{% url 'attendance_report' %}"
+      class="btn btn-outline"
+      style="font-size: 0.85rem"
+      >View Full Report →</a
+    >
+  </div>
+</div>
+{% endif %}
+
+<!-- Recent Attendance Dates -->
+{% if dates %}
+<div class="card">
+  <h3
+    style="
+      margin-bottom: 16px;
+      color: var(--muted);
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    "
+  >
+    Recent Attendance Records
+  </h3>
+  <div style="display: flex; gap: 10px; flex-wrap: wrap">
+    {% for d in dates %}
+    <a
+      href="{% url 'attendance_by_date' d %}"
+      class="badge badge-blue"
+      style="padding: 8px 16px; font-size: 0.9rem"
+    >
+      📅 {{ d }}
+    </a>
+    {% endfor %}
+    <a
+      href="{% url 'attendance_index' %}"
+      class="badge"
+      style="
+        background: var(--surface2);
+        color: var(--muted);
+        padding: 8px 16px;
+        font-size: 0.9rem;
+      "
+    >
+      View All →
+    </a>
+  </div>
+</div>
+{% endif %} {% endblock %}

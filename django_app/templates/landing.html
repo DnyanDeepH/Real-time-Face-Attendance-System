@@ -1,0 +1,40 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Face Attendance System</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+  </head>
+  <body>
+    <div class="landing-page">
+      <div class="landing-box">
+        <div class="landing-logo">👤</div>
+        <h1 class="landing-title">Face Attendance System</h1>
+        <p class="landing-subtitle">
+          Real-time face recognition based attendance tracking.<br />
+          Select your role to continue.
+        </p>
+        <div class="landing-cards">
+          <a href="{% url 'login' %}" class="role-card admin-card">
+            <div class="role-icon">🛡️</div>
+            <h3>Administrator</h3>
+            <p>
+              Manage students, view reports, monitor attendance percentages and
+              records.
+            </p>
+          </a>
+          <a href="{% url 'student_camera' %}" class="role-card student-card">
+            <div class="role-icon">📷</div>
+            <h3>Student</h3>
+            <p>
+              Mark your attendance directly through the face recognition camera.
+            </p>
+          </a>
+        </div>
+      </div>
+    </div>
+    <script src="{% static 'js/main.js' %}"></script>
+  </body>
+</html>

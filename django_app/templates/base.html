@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}Face Attendance System{% endblock %}</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>👤</text></svg>"
+    />
+  </head>
+  <body class="{% block body_class %}{% endblock %}">
+    {% block full_page %}
+    <div class="app-wrapper">
+      {% if request.session.is_admin %}
+      <!-- Admin Sidebar -->
+      <aside class="sidebar">
+        <div class="sidebar-brand">
+          <span class="brand-icon">👤</span>
+          <span class="brand-name">FaceAttend</span>
+        </div>
+        <nav class="sidebar-nav">
+          <a
+            href="{% url 'admin_dashboard' %}"
+            class="nav-item {% if request.resolver_match.url_name == 'admin_dashboard' %}active{% endif %}"
+          >
+            <span class="nav-icon">🏠</span> Dashboard
+          </a>
+          <a
+            href="{% url 'student_list' %}"
+            class="nav-item {% if 'student' in request.resolver_match.url_name %}active{% endif %}"
+          >
+            <span class="nav-icon">👥</span> Students
+          </a>
+          <a
+            href="{% url 'attendance_index' %}"
+            class="nav-item {% if 'attendance' in request.resolver_match.url_name %}active{% endif %}"
+          >
+            <span class="nav-icon">📅</span> Attendance
+          </a>
+          <a
+            href="{% url 'attendance_report' %}"
+            class="nav-item {% if request.resolver_match.url_name == 'attendance_report' %}active{% endif %}"
+          >
+            <span class="nav-icon">📊</span> Reports
+          </a>
+        </nav>
+        <div class="sidebar-footer">
+          <span class="admin-badge"
+            >Admin: {{ request.session.admin_username }}</span
+          >
+          <a href="{% url 'logout' %}" class="btn-logout">Logout</a>
+        </div>
+      </aside>
+      {% endif %}
+
+      <main
+        class="main-content {% if not request.session.is_admin %}full-width{% endif %}"
+      >
+        {% block content %}{% endblock %}
+      </main>
+    </div>
+    {% endblock %}
+
+    <script src="{% static 'js/main.js' %}"></script>
+    {% block extra_js %}{% endblock %}
+  </body>
+</html>
